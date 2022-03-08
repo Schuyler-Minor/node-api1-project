@@ -69,21 +69,23 @@ server.delete("/api/users/:id", (req, res) => {
 
 server.post("/api/users", (req, res) => {
   const body = req.body;
-  // if (!req.body.name) {
-  //   res.status(400).json({ message: "Please provide name for the user" });
-  //   return;
-  // } else if (!req.body.bio) {
-  //   res.status(400).json({ message: "Please provide bio for the user" });
-  //   return;
-  // }
-
-  Users.insert(body)
-    .then((user) => {
-      res.status(201).json(user);
-    })
-    .catch((err) => {
-      res.status(500).json({ message: err.message });
-    });
+  if (!body.name || !body.bio) {
+    res
+      .status(400)
+      .json({ message: "Please provide name and bio for the user" });
+    return;
+  } else {
+    Users.insert(body)
+      .then((newUser) => {
+        res.status(201).json(newUser);
+      })
+      .catch((err) => {
+        res.status(500).json({
+          message: "There was an error while saving the user to the database",
+          err: err.message,
+        });
+      });
+  }
 });
 
 server.use("*", (req, res) => {
