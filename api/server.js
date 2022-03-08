@@ -43,11 +43,20 @@ server.put("/api/users/:id", (req, res) => {
           .status(404)
           .json({ message: "The user with the specified ID does not exist" });
       } else {
-        res.status(200).json(user);
+        if (!req.body.name || !req.body.bio) {
+          res.status(400).json({
+            message: "Please provide name and bio for the user",
+          });
+        } else {
+          res.status(200).json(user);
+        }
       }
     })
     .catch((err) => {
-      res.status(500).json({ message: err.message });
+      res.status(500).json({
+        message: "The user information could not be modified",
+        err: err.message,
+      });
     });
 });
 
