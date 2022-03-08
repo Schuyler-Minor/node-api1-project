@@ -2,6 +2,7 @@
 const express = require("express");
 const Users = require("./users/model");
 const server = express();
+server.use(express.json());
 
 server.get("/api/users", (req, res) => {
   Users.find()
@@ -68,13 +69,13 @@ server.delete("/api/users/:id", (req, res) => {
 
 server.post("/api/users", (req, res) => {
   const body = req.body;
-  if (!req.body.name) {
-    res.status(400).json({ message: "Please provide name for the user" });
-    return;
-  } else if (!req.body.bio) {
-    res.status(400).json({ message: "Please provide bio for the user" });
-    return;
-  }
+  // if (!req.body.name) {
+  //   res.status(400).json({ message: "Please provide name for the user" });
+  //   return;
+  // } else if (!req.body.bio) {
+  //   res.status(400).json({ message: "Please provide bio for the user" });
+  //   return;
+  // }
 
   Users.insert(body)
     .then((user) => {
